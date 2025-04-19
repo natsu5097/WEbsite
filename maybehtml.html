@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>History of Computers</title>
+    <script>
+        // SEARCH FUNCTIONALITY (existing)
+        function searchFunction() {
+            let input = document.getElementById('searchBox').value.trim(); 
+            let content = document.getElementById('content'); 
+            let elements = content.querySelectorAll('p, h3, li'); 
+    
+            elements.forEach(element => {
+                element.innerHTML = element.innerHTML.replace(/<span class="highlight">(.*?)<\/span>/gi, '$1');
+            });
+    
+            if (input === "") return; 
+    
+            const escapedInput = input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`(${escapedInput})`, 'gi');
+    
+            elements.forEach(element => {
+                element.innerHTML = element.innerHTML.replace(regex, '<span class="highlight">$1</span>');
+            });
+        }
+document.addEventListener('DOMContentLoaded', function() {
+    const gallery = document.querySelector('.gallery');
+    const prevBtn = document.getElementById('gallery-prev');
+    const nextBtn = document.getElementById('gallery-next');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    let currentIndex = 0;
+    
+    function updateGallery() {
+        gallery.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+    
+    prevBtn.addEventListener('click', function() {
+        currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+        updateGallery();
+    });
+    
+    nextBtn.addEventListener('click', function() {
+        currentIndex = (currentIndex + 1) % galleryItems.length;
+        updateGallery();
+    });
+    
+    // Initialize gallery position
+    updateGallery();
+});
+        // USER INPUT SYSTEM (new)
+        function submitUserFact(e) {
+            e.preventDefault();
+            const name = document.getElementById('userName').value;
+            const fact = document.getElementById('userFact').value;
+            
+            const factElement = document.createElement('div');
+            factElement.className = 'user-fact';
+            factElement.innerHTML = `
+                <strong>${name}</strong> says:
+                <p>${fact}</p>
+                <small>${new Date().toLocaleString()}</small>
+            `;
+            
+            document.getElementById('userFactsDisplay').prepend(factElement);
+            e.target.reset();
+        }
+    
+        // QUIZ SYSTEM (new)
+        function checkQuizAnswer() {
+            const correctAnswer = document.getElementById('quiz-b').checked;
+            document.getElementById('quiz-result').innerHTML = 
+                correctAnswer ? 
+                '<span style="color:green">✓ Correct! The Z1 (1938) was the first programmable computer.</span>' : 
+                '<span style="color:red">✗ Try again! Hint: It was German-engineered.</span>';
+        }
+        function compareComputers() {
+            const specs = {
+                eniac: { 
+                    speed: "0.0005 MHz", 
+                    storage: "200 bytes", 
+                    weight: "27 tons",
+                    power: "150 kW",
+                    cost: "$6M (2023 dollars)"
+                },
+                ibm360: { 
+                    speed: "1 MHz", 
+                    storage: "8 MB", 
+                    weight: "1 ton",
+                    power: "30 kW",
+                    cost: "$2M (2023 dollars)"
+                },
+                appleii: { 
+                    speed: "1 MHz", 
+                    storage: "64 KB", 
+                    weight: "5.5 kg",
+                    power: "60 W",
+                    cost: "$5,000 (2023 dollars)"
+                },
+                modern: { 
+                    speed: "3000 MHz", 
+                    storage: "256 GB", 
+                    weight: "0.2 kg",
+                    power: "5 W",
+                    cost: "$1,000"
+                },
+                laptop: { 
+                    speed: "4000 MHz", 
+                    storage: "1 TB", 
+                    weight: "1.5 kg",
+                    power: "60 W",
+                    cost: "$1,500"
+                }
+            };
+            
+            const comp1 = document.getElementById('compare1').value;
+            const comp2 = document.getElementById('compare2').value;
+            
+            const results = `
+                <table>
+                    <tr>
+                        <th>Specification</th>
+                        <th>${document.getElementById('compare1').options[document.getElementById('compare1').selectedIndex].text}</th>
+                        <th>${document.getElementById('compare2').options[document.getElementById('compare2').selectedIndex].text}</th>
+                    </tr>
+                    ${Object.entries(specs[comp1]).map(([key, val]) => `
+                        <tr>
+                            <td>${key.charAt(0).toUpperCase() + key.slice(1)}</td>
+                            <td>${val}</td>
+                            <td>${specs[comp2][key]}</td>
+                        </tr>
+                    `).join('')}
+                </table>
+            `;
+            
+            document.getElementById('comparison-results').innerHTML = results;
+        }
+        
+        // Animate timeline on scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            const events = document.querySelectorAll('.timeline-event');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeIn 0.5s ease-out forwards';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            events.forEach(event => {
+                observer.observe(event);
+            });
+        });
+        function showProcessorInfo(model) {
+    const info = {
+        '4004': { cores: 1, speed: '740 kHz', transistors: '2,300' },
+        'i9': { cores: 24, speed: '5.8 GHz', transistors: '~10 billion' }
+    };
+    alert(`Intel ${model}\nCores: ${info[model].cores}\nSpeed: ${info[model].speed}\nTransistors: ${info[model].transistors}`);
+}
+        </script>
+    <style>
+        body {
+            background-color: whitesmoke;
+            font-family: Arial, sans-serif;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+        h1 {
+            color: darkslateblue;
+            text-align: center;
+            font-size: 2em;
+        }
+        h2 {
+            color: darkcyan;
+            border-bottom: 2px solid darkcyan;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: darkorange;
+        }
+        p {
+            color: black;
+            font-size: 1.1em;
+        }
+        li {
+            color: grey;
+        }
+        img {
+            max-width: 300px;
+            height: auto;
+            margin-left: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .marquee {
+            background-color: #4a4e69;
+            color: #ffffff;
+            font-size: 1.5em;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            display: inline-block;
+            animation: scroll 10s linear infinite;
+        }
+
+        .marquee span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scroll 10s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(-100%, 0);
+            }
+        }
+
+        .flex-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.1);
+        }
+        .flex-container div {
+            max-width: 55%;
+        }
+        #searchBox {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: darkslateblue;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:visited {
+        color:blue;
+        }
+        a:hover {
+            color:mediumpurple;
+             background-color: lavenderblush;
+        }
+        a:active {
+        color: limegreen;
+        }
+                 
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: darkslateblue;
+        }
+        form input[type="text"], form input[type="email"], form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        form textarea {
+            resize: vertical;
+            height: 150px;
+        }
+        button {
+     background-color: blue;
+     color: white;
+     padding: 10px 15px;
+     border: none;
+     font-size: 16px;
+     cursor: pointer;
+     border-radius: 5px;
+     transition: background 0.3s ease;
+     }
+    button:hover {
+    background-color:skyblue;
+    }
+    .gallery-container {
+    position: relative;
+    max-width: 800px;
+    margin: 30px auto;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.gallery {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+}
+
+.gallery-item {
+    min-width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.gallery-item img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 18px;
+    z-index: 10;
+}
+
+.gallery-nav:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+#gallery-prev {
+    left: 10px;
+}
+
+#gallery-next {
+    right: 10px;
+}
+
+.caption {
+    margin-top: 10px;
+    font-style: italic;
+    color: #555;
+}
+
+        /* User Input Section */
+        .user-input-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.1);
+        }
+        #userFactsDisplay {
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .user-fact {
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #4a4e69;
+            border-radius: 0 5px 5px 0;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.1);
+        }
+        .quiz-container input[type="radio"] {
+            margin-right: 10px;
+        }
+        #quiz-result {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        .timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px 0;
+}
+timeline {
+            position: relative;
+            max-width: 100%;
+            margin: 40px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: linear-gradient(to bottom, #4a4e69, #9b59b6);
+            top: 0;
+            bottom: 0;
+            left: 50px;
+            border-radius: 2px;
+        }
+        
+        .timeline-event {
+            position: relative;
+            margin-bottom: 40px;
+            padding-left: 80px;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .event-dot {
+            width: 20px;
+            height: 20px;
+            background: #4a4e69;
+            border-radius: 50%;
+            position: absolute;
+            left: 40px;
+            border: 3px solid #9b59b6;
+        }
+        
+        .event-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Comparison Tool */
+        .comparison-tool {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        .processor-evolution {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 0;
+}
+.processor {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+.processor:hover {
+    transform: scale(1.1);
+}
+.chip {
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+  </style>
+</head>
+<body>
+    <h1><b>History Of Computers</b></h1>
+     <input type="text" id="searchBox" placeholder="Search the history..." onkeyup="searchFunction()">
+     <div class="marquee-container">
+        <div class="marquee">
+            <span>Discover the evolution of computers from the first generation to the present and beyond!</span>
+        </div>
+    </div>
+
+    <h2>Introduction</h2>
+<p>
+    The evolution of computers is a fascinating journey that reflects the ingenuity and creativity of human beings. From the early mechanical devices used for calculations to the sophisticated AI systems of today, computers have transformed the way we live, work, and communicate. This document explores the various generations of computers, highlighting their key features and contributions to technology. Understanding this history not only provides insight into the technological advancements we enjoy today but also prepares us for the future of computing.
+</p>
+    <p>
+        The evolution of computers began in the 16th century, leading to the modern computers we use today. Over the years, computers have undergone significant changes, improving in speed, accuracy, size, and cost. Below are some basic terms related to the generations of computers:
+    </p>
+     <ol>
+        <li>Vacuum Tube: Used to control the flow of electricity in a vacuum.</li>
+        <li>Transistor: A semiconductor device that controls electricity flow.</li>
+        <li>Integrated Circuit (IC): A silicon chip with multiple circuit elements.</li>
+        <li>Microprocessor: A compact IC containing the CPU and circuits.</li>
+        <li>Central Processing Unit (CPU): The brain of the computer.</li>
+    </ol>
+   <h2>Timeline of Computer History</h2>
+   <ul>
+    <li>
+        <h3>Abacus (c. 3000 BC)</h3>
+        <p>One of the earliest known computing tools, used for arithmetic calculations.</p>
+    </li>
+    <li>
+        <h3>Pascaline (1642)</h3>
+        <p>A mechanical adding machine created by Blaise Pascal to assist in tax calculations.</p>
+    </li>
+    <li>
+        <h3>Analytical Engine (1837)</h3>
+        <p>Charles Babbage designed this general-purpose mechanical computer, which was never completed.</p>
+    </li>
+    <li>
+        <h3>Hollerith Tabulating Machine (1890)</h3>
+        <p>Developed by Herman Hollerith, this machine used punched cards to process census data.</p>
+    </li>
+    <li>
+        <h3>ENIAC (1945)</h3>
+        <p>The first general-purpose electronic digital computer, used for artillery trajectory calculations.</p>
+    </li>
+    <li>
+        <h3>Transistor (1947)</h3>
+        <p>Invented by John Bardeen, Walter Brattain, and William Shockley, it replaced vacuum tubes in computers.</p>
+    </li>
+    <li>
+        <h3>IBM System/360 (1964)</h3>
+        <p>A revolutionary mainframe computer system that introduced the concept of compatibility across models.</p>
+    </li>
+    <li>
+        <h3>Microprocessor (1971)</h3>
+        <p>The Intel 4004 was the first commercially available microprocessor, leading to the development of personal computers.</p>
+    </li>
+    <li>
+        <h3>Apple II (1977)</h3>
+        <p>One of the first highly successful mass-produced microcomputer products.</p>
+    </li>
+    <li>
+        <h3>World Wide Web (1989)</h3>
+        <p>Tim Berners-Lee proposed the World Wide Web, revolutionizing how information is shared and accessed.</p>
+    </li>
+    <li>
+        <h3>Smartphones (2000s)</h3>
+        <p>The introduction of smartphones changed the way we interact with technology and access information.</p>
+    </li>
+    <li>
+        <h3>AI and Quantum Computing (Present & Beyond)</h3>
+        <p>Advancements in AI and quantum computing are shaping the future of technology and problem-solving.</p>
+    </li>
+</ul>
+<h2>Detailed Computer History Timeline</h2>
+    <div class="timeline">
+        <div class="timeline-event" data-year="1936">
+            <div class="event-dot"></div>
+            <div class="event-content">
+                <h3>Turing Machine Conceptualized</h3>
+                <p>Alan Turing publishes his paper "On Computable Numbers" introducing the concept of a theoretical computing machine.</p>
+            </div>
+        </div>
+        <div class="timeline-event" data-year="1945">
+            <div class="event-dot"></div>
+            <div class="event-content">
+                <h3>ENIAC Completed</h3>
+                <p>The first general-purpose electronic computer is completed at the University of Pennsylvania.</p>
+            </div>
+        </div>
+        <div class="timeline-event" data-year="1947">
+            <div class="event-dot"></div>
+            <div class="event-content">
+                <h3>Transistor Invented</h3>
+                <p>Bell Labs scientists invent the transistor, revolutionizing computer technology.</p>
+            </div>
+        </div>
+        <div class="timeline-event" data-year="1964">
+            <div class="event-dot"></div>
+            <div class="event-content">
+                <h3>IBM System/360</h3>
+                <p>IBM introduces the System/360, the first mainframe computer family.</p>
+            </div>
+        </div>
+        <div class="timeline-event" data-year="1971">
+            <div class="event-dot"></div>
+            <div class="event-content">
+                <h3>First Microprocessor</h3>
+                <p>Intel releases the 4004, the first commercially available microprocessor.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- NEW COMPARISON TOOL -->
+    <div class="comparison-tool">
+        <h3>Computer Comparison</h3>
+        <select id="compare1">
+            <option value="eniac">ENIAC (1945)</option>
+            <option value="ibm360">IBM 360 (1964)</option>
+            <option value="appleii">Apple II (1977)</option>
+        </select>
+        <span> vs. </span>
+        <select id="compare2">
+            <option value="modern">Modern Smartphone</option>
+            <option value="laptop">Modern Laptop</option>
+        </select>
+        <button onclick="compareComputers()">Compare</button>
+        <div id="comparison-results"></div>
+    </div>
+    <div class="processor-evolution">
+    <div class="processor" data-year="1971" onclick="showProcessorInfo('4004')">
+        <div class="chip">Intel 4004</div>
+    </div>
+    <div class="processor" data-year="2023" onclick="showProcessorInfo('i9')">
+        <div class="chip">Core i9</div>
+    </div>
+</div>
+    <h2>Key Figures in Computing History</h2>
+<ul>
+    <li>
+        <h3>Alan Turing (1912-1954)</h3>
+        <p>Often referred to as the father of computer science, Turing developed the concept of the Turing machine, which is fundamental to the theory of computation. His work during World War II on breaking the Enigma code was crucial to the Allied victory.</p>
+    </li>
+    <li>
+        <h3>Ada Lovelace (1815-1852)</h3>
+        <p>Considered the first computer programmer, Lovelace worked on Charles Babbage's Analytical Engine and wrote the first algorithm intended for implementation on a machine.</p>
+    </li>
+    <li>
+        <h3>John von Neumann (1903-1957)</h3>
+        <p>A mathematician and physicist, von Neumann made significant contributions to computer architecture, including the concept of stored-program architecture, which is the foundation of most modern computers.</p>
+    </li>
+</ul>
+</ul>
+    <h2> Early Computing: The Foundations of Modern Computers</h2>
+    <p>
+        Before modern computers, humans used mechanical devices to aid in calculations and data processing. These early innovations laid the groundwork for today's advanced computing systems.
+    </p>
+    <ul>
+    <li><h3>Ancient Counting Devices</h3></li>
+    <ol>
+    <li>Abacus (c. 3000 BC) – One of the earliest known computing tools, used by the Babylonians, Chinese, and Romans to perform arithmetic calculations.</li>
+    <li>Napier’s Bones (1617) – A manual calculating tool invented by John Napier to simplify multiplication and division.</li>
+    </ol>
+    <li><h3>Mechanical Calculators</h3></li>
+    <ol>
+    <li>
+    Pascaline (1642) – A mechanical adding machine created by Blaise Pascal to assist in tax calculations.
+    Leibniz’s Stepped Reckoner
+    (1673) – Gottfried Wilhelm Leibniz designed this device to perform all four basic arithmetic operations.
+</li>
+</ol>
+    <li><h3> Early Programmable Machines</h3></li>
+    <ol>
+    <li>Jacquard Loom (1801) – Joseph-Marie Jacquard invented a weaving machine that used punched cards to control patterns, influencing later computing concepts.</li>
+    </li>
+    <li>
+        <h3>ENIAC (1945)</h3>
+        <p>The first general-purpose electronic digital computer, used for artillery trajectory calculations.</p>
+    </li>
+    <li>
+        <h3>Transistor (1947)</h3>
+        <p>Invented by John Bardeen, Walter Brattain, and William Shockley, it replaced vacuum tubes in computers.</p>
+    </li>
+    <li>
+        <h3>IBM System/360 (1964)</h3>
+        <p>A revolutionary mainframe computer system that introduced the concept of compatibility across models.</p>
+    </li>
+    <li>
+        <h3>Microprocessor (1971)</h3>
+        <p>The Intel 4004 was the first commercially available microprocessor, leading to the development of personal computers.</p>
+    </li>
+    <li>
+        <h3>Apple II (1977)</h3>
+        <p>One of the first highly successful mass-produced microcomputer products.</p>
+    </li>
+    <li>
+        <h3>World Wide Web (1989)</h3>
+        <p>Tim Berners-Lee proposed the World Wide Web, revolutionizing how information is shared and accessed.</p>
+    </li>
+    <li>
+        <h3>Smartphones (2000s)</h3>
+        <p>The introduction of smartphones changed the way we interact with technology and access information.</p>
+    </li>
+    <li>
+        <h3>AI and Quantum Computing (Present & Beyond)</h3>
+        <p>Advancements in AI and quantum computing are shaping the future of technology and problem-solving.</p>
+    </li>
+</ul>
+    <h2>Key Figures in Computing History</h2>
+<ul>
+    <li>
+        <h3>Alan Turing (1912-1954)</h3>
+        <p>Often referred to as the father of computer science, Turing developed the concept of the Turing machine, which is fundamental to the theory of computation. His work during World War II on breaking the Enigma code was crucial to the Allied victory.</p>
+    </li>
+    <li>
+        <h3>Ada Lovelace (1815-1852)</h3>
+        <p>Considered the first computer programmer, Lovelace worked on Charles Babbage's Analytical Engine and wrote the first algorithm intended for implementation on a machine.</p>
+    </li>
+    <li>
+        <h3>John von Neumann (1903-1957)</h3>
+        <p>A mathematician and physicist, von Neumann made significant contributions to computer architecture, including the concept of stored-program architecture, which is the foundation of most modern computers.</p>
+    </li>
+</ul>
+</ul>
+<h2>Historical Computer Gallery</h2>
+<div class="gallery-container">
+    <div class="gallery">
+        <div class="gallery-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/ENIAC_Penn1.jpg" alt="ENIAC">
+            <p class="caption">ENIAC (1945) - First general-purpose electronic computer</p>
+        </div>
+        <div class="gallery-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/IBM_System360_Model_30.jpg" alt="IBM 360">
+            <p class="caption">IBM System/360 (1964) - Revolutionary mainframe</p>
+        </div>
+        <div class="gallery-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Apple_II_tranparent_800.png" alt="Apple II">
+            <p class="caption">Apple II (1977) - First successful mass-market PC</p>
+        </div>
+    </div>
+    <button class="gallery-nav" id="gallery-prev">❮</button>
+    <button class="gallery-nav" id="gallery-next">❯</button>
+</div>
+    <h2> Early Computing: The Foundations of Modern Computers</h2>
+    <p>
+        Before modern computers, humans used mechanical devices to aid in calculations and data processing. These early innovations laid the groundwork for today's advanced computing systems.
+    </p>
+    <ul>
+    <li><h3>Ancient Counting Devices</h3></li>
+    <ol>
+    <li>Abacus (c. 3000 BC) – One of the earliest known computing tools, used by the Babylonians, Chinese, and Romans to perform arithmetic calculations.</li>
+    <li>Napier’s Bones (1617) – A manual calculating tool invented by John Napier to simplify multiplication and division.</li>
+    </ol>
+    <li><h3>Mechanical Calculators</h3></li>
+    <ol>
+    <li>
+    Pascaline (1642) – A mechanical adding machine created by Blaise Pascal to assist in tax calculations.
+    Leibniz’s Stepped Reckoner
+    (1673) – Gottfried Wilhelm Leibniz designed this device to perform all four basic arithmetic operations.
+</li>
+</ol>
+    <li><h3> Early Programmable Machines</h3></li>
+    <ol>
+    <li>Jacquard Loom (1801) – Joseph-Marie Jacquard invented a weaving machine that used punched cards to control patterns, influencing later computing concepts.</li>
+    <li>Charles Babbage’s Analytical Engine (1837) – Often called the first general-purpose mechanical computer, it had components similar to a modern CPU but was never completed.
+    Ada Lovelace (1843) – She wrote the first algorithm for Babbage’s machine, earning her the title of the world’s first computer programmer.</li>
+    </ol>
+    <li><h3>Electromechanical Computing</h3></li>
+    <ol>
+    <li>Hollerith Tabulating Machine (1890) – Herman Hollerith developed this machine using punched cards to process U.S. census data, significantly reducing processing time.</li>
+    <li>Turing Machine (1936) – Alan Turing conceptualized this theoretical device, forming the basis of modern computers and computation theory.</li>
+</ol>
+</ul>
+    <h2>Generations of Computers</h2>
+    <p>The evolution of computers is categorized into five distinct generations, each marked by significant technological advancements that have transformed the way we process information and interact with technology.</p>
+    <div class="flex-container">
+        <div>
+            <h3>First Generation (1940-1956)</h3>
+            <ul>
+                <p>The first generation of computers (1940-1956) relied on vacuum tubes. These large, power-hungry systems were primarily used for complex calculations and data processing, employing machine language for programming. Despite their limitations, they laid the foundation for future computing advancements and were mainly utilized in government and military applications, marking the dawn of the computer age.</p>
+                <li>Main component: Vacuum tubes</li>
+                <li>Main memory: Magnetic drums & tapes</li>
+                <li>Language: Machine language</li>
+                <li>Power: High electricity & heat generation</li>
+                <li>Size: Very large & expensive</li>
+            </ul>
+        </div>
+        <img src="C:\Users\zeref\Downloads\5th,3rd,2nd\1st.png" alt="First Generation">
+    </div>
+    <div class="flex-container">
+        <div>
+            <h3>Second Generation (1956-1963)</h3>
+            <ul>
+                <p>The second generation introduced transistors, replacing vacuum tubes and resulting in smaller, faster, and more reliable computers. Programming languages evolved, with assembly language becoming more common, facilitating easier programming. The reduction in size and cost made computers more accessible to businesses and educational institutions, paving the way for widespread adoption.</p>
+                <li>Main component: Transistors</li>
+                <li>Main memory: Magnetic core & tapes</li>
+                <li>Language: Assembly language</li>
+                <li>Power & size: Lower power, smaller size</li>
+                <li>Cost: More affordable</li>
+            </ul>
+        </div>
+        <img src="C:\Users\zeref\Downloads\5th,3rd,2nd\2nd.png" alt="Second Generation">
+    </div>
+    <div class="flex-container">
+        <div>
+            <h3>Third Generation (1964-1971)</h3>
+            <ul>
+                <p>The third generation was marked by integrated circuits (ICs), embedding multiple transistors on a single chip, which enhanced processing power while reducing size and cost. High-level programming languages like COBOL and FORTRAN emerged, enabling complex software development. This era also saw the introduction of operating systems that allowed multiple applications to run simultaneously, marking the beginning of the personal computer revolution.</p>
+                <li>Main component: Integrated circuits</li>
+                <li>Main memory: RAM & magnetic disks</li>
+                <li>Language: High-level (COBOL, FORTRAN)</li>
+                <li>Power & size: Lower consumption & compact</li>
+                <li>Cost: More affordable</li>
+            </ul>
+        </div>
+        <img src="C:\Users\zeref\Downloads\5th,3rd,2nd\3rd.png" alt="Third Generation">
+    </div>
+    <div class="flex-container">
+        <div>
+            <h3>Fourth Generation (1971-Present)</h3>
+            <ul>
+                <p>The fourth generation is characterized by microprocessors, compact integrated circuits that house the CPU. This innovation led to the rise of personal computers, revolutionizing individual and business operations. Graphical user interfaces (GUIs) made computers more intuitive, while the internet's proliferation transformed communication and commerce, creating a global digital landscape.</p>
+                <li>Main component: Microprocessors</li>
+                <li>Main memory: RAM & ROM</li>
+                <li>Language: High-level & object-oriented</li>
+                <li>Power & size: Energy efficient, compact</li>
+                <li>Cost: Widely affordable</li>
+            </ul>
+        </div>
+        <img src="C:\Users\zeref\Downloads\5th,3rd,2nd\4th.png" alt="Fourth Generation">
+    </div>
+    <div class="flex-container">
+        <div>
+            <h3>Fifth Generation (Present & Beyond)</h3>
+            <ul>
+                <p>The fifth generation focuses on advancements in artificial intelligence (AI), machine learning, and quantum computing. These technologies aim to create systems that learn and adapt. AI applications are increasingly integrated into daily life, while quantum computing holds the potential to solve complex problems at unprecedented speeds. Ethical implications and societal impacts of these technologies will be crucial as we shape the future of computing.</p>
+                <li>Main component: AI & quantum computing</li>
+                <li>Main memory: Advanced memory tech</li>
+                <li>Language: NLP & AI programming</li>
+                <li>Power & size: Energy efficiency & miniaturization</li>
+                <li>Features: Machine learning, neural networks</li>
+            </ul>
+        </div>
+        <img src="C:\Users\zeref\Downloads\5th,3rd,2nd\5th.png">
+    </div>
+    <h2>Summary of Computer Generations</h2>
+<table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+    <thead>
+        <tr style="background-color: #4a4e69; color: white;">
+            <th style="padding: 10px; border: 1px solid #ddd;">Generation</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">Time Period</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">Main Component</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">Memory Type</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">Programming Language</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">Key Features</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">First Generation</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">1940-1956</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Vacuum Tubes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Magnetic Drums & Tapes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Machine Language</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Large size, high power consumption, expensive</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Second Generation</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">1956-1963</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Transistors</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Magnetic Core & Tapes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Assembly Language</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Smaller size, lower power consumption, more affordable</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Third Generation</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">1964-1971</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Integrated Circuits</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">RAM & Magnetic Disks</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">High-level (COBOL, FORTRAN)</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Compact size, more affordable, lower power consumption</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Fourth Generation</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">1971-Present</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Microprocessors</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">RAM & ROM</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">High-level & Object-oriented</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Energy efficient, compact, widely affordable</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Fifth Generation</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Present & Beyond</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">AI & Quantum Computing</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Advanced Memory Tech</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">NLP & AI Programming</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Machine learning, neural networks, advanced features</td>
+        </tr>
+    </tbody>
+</table>
+    <h2>To Sum It Up</h2>
+    <p>The journey through the generations of computers illustrates the remarkable progress in technology and its profound impact on society. Each generation has built upon the innovations of the previous one, leading to the sophisticated computing systems we rely on today. As we continue to advance into the future, understanding this history will help us navigate the challenges and opportunities that lie ahead in the ever-evolving landscape of technology.
+    </p>
+    <h2>Impact of Computers on Society</h2>
+<p>
+    Computers have revolutionized nearly every aspect of modern life. From healthcare to education, entertainment to communication, the impact of computers is profound and far-reaching. Below are some key areas where computers have made a significant difference:
+</p>
+<ul>
+    <li>
+        <h3>Healthcare</h3>
+        <p>Computers have enabled advancements in medical research, diagnostics, and treatment. For example, MRI machines and robotic surgery rely heavily on computer technology.</p>
+    </li>
+    <li>
+        <h3>Education</h3>
+        <p>Online learning platforms and digital resources have made education more accessible to people around the world. Tools like virtual classrooms and AI tutors are transforming how we learn.</p>
+    </li>
+    <li>
+        <h3>Entertainment</h3>
+        <p>From video games to streaming services, computers have revolutionized the entertainment industry. CGI in movies and music production software are just a few examples.</p>
+    </li>
+    <li>
+        <h3>Communication</h3>
+        <p>The internet and social media have transformed how we communicate, enabling instant communication across the globe.</p>
+    </li>
+</ul>
+<h2>The Future of Computing</h2>
+<p>
+    As we look ahead, the future of computing promises to be even more revolutionary. With advancements in artificial intelligence, quantum computing, and machine learning, we are on the brink of a new era in technology. These innovations have the potential to solve complex problems, enhance decision-making processes, and create new opportunities across various industries.
+</p>
+<p>
+    For instance, quantum computers, which leverage the principles of quantum mechanics, could perform calculations at speeds unimaginable with current technology. This could lead to breakthroughs in fields such as cryptography, drug discovery, and climate modeling. Additionally, the integration of AI into everyday devices is expected to create smarter, more responsive systems that can learn and adapt to user needs.
+</p>
+<p>
+    However, with these advancements come challenges, including ethical considerations, data privacy concerns, and the need for new regulations. As we embrace the future of computing, it is crucial to navigate these challenges responsibly to ensure that technology serves humanity positively.
+</p>
+<h2>What’s Next? The Future of Computing</h2>
+<p>
+    The future of computing is filled with exciting possibilities. Here are some predictions for what lies ahead:
+</p>
+<ul>
+    <li>
+        <h3>Quantum Supremacy</h3>
+        <p>Quantum computers could solve problems that are currently impossible for classical computers, revolutionizing fields like cryptography, drug discovery, and materials science.</p>
+    </li>
+    <li>
+        <h3>Brain-Computer Interfaces</h3>
+        <p>Companies like Neuralink are working on technologies that could allow direct communication between the human brain and computers, opening up new possibilities for healthcare and human-computer interaction.</p>
+    </li>
+    <li>
+        <h3>Artificial General Intelligence (AGI)</h3>
+        <p>While current AI systems are specialized, AGI aims to create machines that can perform any intellectual task that a human can do, potentially transforming every aspect of society.</p>
+    </li>
+</ul>
+<h2>Green Computing</h2>
+<p>
+    As technology advances, the environmental impact of computing has become a growing concern. Here are some efforts to make computing more sustainable:
+</p>
+<ul>
+    <li>
+        <h3>Energy-Efficient Hardware</h3>
+        <p>Companies are designing energy-efficient processors and components to reduce power consumption.</p>
+    </li>
+    <li>
+        <h3>Recycling Programs</h3>
+        <p>Many tech companies now offer recycling programs for old devices to reduce e-waste.</p>
+    </li>
+    <li>
+        <h3>Renewable Energy</h3>
+        <p>Data centers are increasingly powered by renewable energy sources like solar and wind.</p>
+    </li>
+</ul>
+<h2>Quantum Computing: The Latest Innovation Of Computing</h2>
+<p>Quantum computing is a type of computation that takes advantage of the principles of quantum mechanics to process information in fundamentally different ways than classical computers. While classical computers use bits as the smallest unit of data (which can be either 0 or 1), quantum computers use quantum bits, or qubits, which can exist in multiple states simultaneously.</p>
+
+<h3>Key Concepts in Quantum Computing</h3>
+<ol>
+    <li>
+        Qubits:
+        <ul>
+            <li>Unlike classical bits, qubits can represent both 0 and 1 at the same time due to a property called superposition. This allows quantum computers to process a vast amount of information simultaneously.</li>
+        </ul>
+    </li>
+    <li>
+        Superposition:
+        <ul>
+            <li>Superposition is the ability of a quantum system to be in multiple states at once. For example, a qubit can be in a state that is a combination of both 0 and 1, which enables quantum computers to perform many calculations at once.</li>
+        </ul>
+    </li>
+    <li>
+        Entanglement:
+        <ul>
+            <li>Entanglement is a phenomenon where qubits become interconnected such that the state of one qubit can depend on the state of another, no matter how far apart they are. This property can be used to perform complex calculations more efficiently than classical computers.</li>
+        </ul>
+    </li>
+    <li>
+        Quantum Gates:
+        <ul>
+            <li>Quantum gates manipulate qubits through operations that change their states. These gates are the building blocks of quantum circuits, similar to how classical logic gates function in traditional computing.</li>
+        </ul>
+    </li>
+    <li>
+        Quantum Algorithms:
+        <ul>
+            <li>Quantum computers can run specialized algorithms that can solve certain problems much faster than classical algorithms. Notable examples include:</li>
+            <ul>
+                <li>Shor's Algorithm: Efficiently factors large integers, which has implications for cryptography.</li>
+                <li>Grover's Algorithm: Provides a quadratic speedup for unstructured search problems.</li>
+            </ul>
+        </ul>
+    </li>
+</ol>
+
+<h3>Advantages of Quantum Computing</h3>
+<ul>
+    <li>Speed: For specific problems, quantum computers can perform calculations much faster than classical computers. This is particularly true for problems involving large datasets or complex simulations.</li>
+    <li>Parallelism: Due to superposition, quantum computers can explore multiple solutions simultaneously, which can lead to faster problem-solving.</li>
+    <li>Complex Problem Solving: Quantum computers are expected to excel in fields such as cryptography, optimization, drug discovery, and materials science, where classical computers struggle.</li>
+</ul>
+
+<h3>Challenges in Quantum Computing</h3>
+<ul>
+    <li>Decoherence: Quantum states are fragile and can be easily disturbed by their environment, leading to errors in calculations. Maintaining qubit stability (coherence) is a significant challenge.</li>
+    <li>Error Correction: Quantum error correction is more complex than classical error correction due to the nature of quantum states. Developing effective error-correcting codes is crucial for practical quantum computing.</li>
+    <li>Scalability: Building large-scale quantum computers with enough qubits to outperform classical computers is a significant engineering challenge.</li>
+</ul>
+
+<h3>Current State of Quantum Computing</h3>
+<p>As of now, quantum computing is still in its early stages, with several companies and research institutions actively developing quantum hardware and algorithms. Some notable players in the field include:</p>
+<ul>
+    <li>IBM: Offers the IBM Quantum Experience, allowing users to run experiments on real quantum computers via the cloud.</li>
+    <li>Google: Achieved a milestone in quantum supremacy with its Sycamore processor, demonstrating that a quantum computer can perform a specific task faster than the best classical supercomputers.</li>
+    <li>D-Wave: Focuses on quantum annealing, a specific type of quantum computing that is particularly suited for optimization problems.</li>
+    <li>Microsoft: Developing a quantum computing platform called Azure Quantum, which aims to provide access to various quantum hardware and software tools.</li>
+</ul>
+
+<h3>Conclusion</h3>
+<p>Quantum computing holds the potential to revolutionize various fields by solving problems that are currently intractable for classical computers. While significant challenges remain, ongoing research and development are paving the way for practical applications of quantum technology in the near future. As the field evolves, it will be essential to address the technical hurdles and ethical considerations associated with this powerful technology.</p>
+<h2>Fun Facts About Computers</h2>
+<ul>
+    <li>The first computer bug was an actual bug—a moth found in the Harvard Mark II computer in 1947.</li>
+    <li>The first computer mouse was made of wood and had only one button.</li>
+    <li>The first website, created by Tim Berners-Lee, is still online at <a href="https://info.cern.ch/" target="_blank">Tim Berner's Lee</a>.</li>
+    <li>The world's first programmable computer, the Z1, was created in 1938 by Konrad Zuse.</li>
+</ul>
+<!-- NEW QUIZ SECTION -->
+<div class="quiz-container">
+    <h3>Computer History Quiz</h3>
+    <p>What was the first programmable computer called?</p>
+    <input type="radio" name="quiz" id="quiz-a"> <label for="quiz-a">ENIAC</label><br>
+    <input type="radio" name="quiz" id="quiz-b"> <label for="quiz-b">Z1</label><br>
+    <input type="radio" name="quiz" id="quiz-c"> <label for="quiz-c">IBM 360</label><br>
+    <button onclick="checkQuizAnswer()">Check Answer</button>
+    <div id="quiz-result"></div>
+</div>
+
+<!-- NEW USER INPUT SECTION -->
+<div class="user-input-section">
+    <h2>Share Your Computer History Knowledge!</h2>
+    <form id="userFactForm" onsubmit="submitUserFact(event)">
+        <label for="userName">Your Name:</label>
+        <input type="text" id="userName" placeholder="e.g., Alan Turing" required>
+        
+        <label for="userFact">Interesting Fact:</label>
+        <textarea id="userFact" placeholder="Did you know? The first computer bug was a real moth!" required></textarea>
+        
+        <button type="submit">Submit Fact</button>
+    </form>
+    
+    <div id="userFactsDisplay">
+        <h3>Community Contributions:</h3>
+    </div>
+</div>
+<h2>Contact Us</h2>
+<form>
+    <label>Name: <input type="text" required></label>
+    <label>Email: <input type="email" required></label>
+    <label>Gender:
+        <select required>
+            <option value="">Select</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+        </select>
+    </label>
+    <label>Message: <textarea required></textarea></label>
+    <button type="submit">Submit</button>
+</form>
+    <a href="https://en.wikipedia.org/wiki/History_of_computing" target="_blank">Learn more on Wikipedia</a>
+</body>
+</html>
